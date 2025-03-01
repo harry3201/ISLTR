@@ -136,10 +136,10 @@ CONFIDENCE_THRESHOLD = 0.85
 
 ## **👨‍💻 Contributors**  
 
-- **[Your Name]** – Developed & Trained the Model  
-- **[Your Collaborators]** – Assisted with Data Collection & UI  
+- **Harshad Nagpure** – Developed & Trained the Model  
+- **Dewansh Gopani** – Assisted with Data Collection & Fine Tuning   
 
-📧 **Contact:** [Your Email]  
+📧 **Contact:** h.incworks@gmail.com  
 
 ---
 
@@ -147,5 +147,6 @@ CONFIDENCE_THRESHOLD = 0.85
 
 - **MediaPipe Hands**: [https://developers.google.com/mediapipe](https://developers.google.com/mediapipe)  
 - **LSTM for Gesture Recognition**: [https://www.tensorflow.org/tutorials](https://www.tensorflow.org/tutorials)  
+- **ISL Gestures & Dictionary** : [https://islrtc.nic.in/]
 
 ---
