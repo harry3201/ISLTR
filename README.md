@@ -52,7 +52,7 @@ pip install opencv-python mediapipe numpy tensorflow keras pillow
 This script captures **video sequences** of hand gestures and extracts **MediaPipe hand keypoints**.  
 
 ```bash
-python dataset_collection.py
+python collect_imgs.py
 ```
 
 - The system captures **30 frames per gesture** to ensure smooth recognition.  
@@ -62,7 +62,7 @@ python dataset_collection.py
 Convert raw keypoints into a structured dataset for training:  
 
 ```bash
-python preprocess_data.py
+python create_dataset.py
 ```
 
 - Ensures **consistent data format**.  
@@ -74,7 +74,7 @@ python preprocess_data.py
 
 ### **3️⃣ Train the LSTM Model**  
 ```bash
-python train_model.py
+python buildlstm.py
 ```
 - Uses a **sequential LSTM network** to learn gesture patterns.  
 - The trained model is saved as **`lstm_model.h5`**.  
@@ -85,7 +85,7 @@ python train_model.py
 
 ### **4️⃣ Start Gesture Recognition**  
 ```bash
-python real_time_translation.py
+python real_time_inference.py
 ```
 - Uses the webcam to detect **hand movements**.  
 - Displays **live translations** in **English, Hindi, and Gujarati**.  
@@ -108,7 +108,7 @@ python real_time_translation.py
 ## **🎨 Customization**  
 
 ### **Modify Font Colors or Sizes**  
-Edit `real_time_translation.py`:  
+Edit `real_time_inference.py`:  
 
 ```python
 hindi_font = ImageFont.truetype("fonts/NotoSansDevanagari-VariableFont_wdth,wght.ttf", 42)
