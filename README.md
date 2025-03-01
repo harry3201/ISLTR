@@ -1,4 +1,4 @@
-# **Gesture-Based Multilingual Text Translator**  
+# **Indian Sign Language Gesture Recognition To Multilingual Text**  
 
 A **real-time gesture recognition system** that converts **hand movements into text translations** in **English, Hindi, and Gujarati**. This project bridges communication gaps by allowing users to express words through simple hand gestures, which are recognized using **deep learning and computer vision**.  
 
