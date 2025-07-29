@@ -1,6 +1,3 @@
-Here’s a cleaned, professional, and technically accurate version of your README that reflects your actual implementation with precise terminology and structure:
-
----
 
 # **Real-Time Indian Sign Language (ISL) Recognition System**
 
