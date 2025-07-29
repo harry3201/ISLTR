@@ -1,146 +1,171 @@
 
-# **Real-Time Indian Sign Language (ISL) Recognition System**
 
-This project is a real-time recognition system for Indian Sign Language (ISL) that translates hand gestures into English text. It uses computer vision and machine learning techniques to identify static gestures from webcam input, making communication more accessible for individuals using sign language.
+# **Real-Time Indian Sign Language Gesture Recognition**
+
+This project implements a real-time Indian Sign Language (ISL) gesture recognition system. It detects and interprets static hand gestures from webcam video using computer vision (MediaPipe) and deep learning (LSTM), translating them into English, Hindi, and Gujarati text.
 
 ---
 
 ## **Project Overview**
 
-The goal of this project is to develop an efficient ISL gesture recognition system that operates in real time. It captures hand gestures using a webcam, detects key landmarks using MediaPipe, and classifies the gesture using a trained machine learning model. The predicted gesture is then displayed as text on screen.
+Indian Sign Language is a vital communication method for the deaf and hard-of-hearing community. This system captures hand gestures via webcam, extracts hand keypoints using MediaPipe, and classifies gesture sequences using an LSTM model trained on temporal keypoint data. The predicted output is displayed in three languages, making the system inclusive and multilingual.
 
 ---
 
-## **Key Features**
+## **Features**
 
-* Real-time gesture detection using **MediaPipe Hands**
-* Static gesture classification using a **Random Forest Classifier**
-* Efficient preprocessing and landmark extraction for high accuracy
-* Lightweight, fast, and suitable for local deployment
-* Modular codebase for data collection, training, and inference
+* Real-time hand tracking using **MediaPipe**
+* Gesture sequence classification with an **LSTM model**
+* Translation support in **English, Hindi, and Gujarati**
+* Font rendering for Indian scripts
+* Configurable confidence threshold and display parameters
 
 ---
 
-## **Folder Structure**
+## **Directory Structure**
 
 ```
-/isl-recognition
-│── /data_collection/                # Scripts for collecting gesture images and landmarks
-│── /models/                         # Trained ML model and label mappings
-│── /utils/                          # Utility functions for preprocessing and display
-│── collect_data.py                 # Capture and save gesture images
-│── extract_keypoints.py            # Extract MediaPipe landmarks from images
-│── train_model.py                  # Train Random Forest Classifier
-│── inference.py                    # Real-time prediction using webcam
-│── model.pkl                       # Trained gesture recognition model
-│── labels.pickle                   # Label encoder for class names
-│── README.md                       # Project documentation
+.
+├── data/                       # Raw collected gesture data
+├── fonts/                      # Font files for rendering Hindi and Gujarati
+├── preprocessed_data/         # Normalized and labeled landmark data
+├── videodata/                 # Video sequences used during data collection
+├── buildlstm.py               # LSTM model architecture and training script
+├── collect_imgs.py            # Script to record video gesture samples
+├── create_dataset.py          # Extracts MediaPipe keypoints and prepares dataset
+├── create_mapping.py          # Generates label mappings for multilingual output
+├── lstm_model.h5              # Trained LSTM model
+├── real_time_inference.py     # Live gesture recognition and translation script
+├── README.md                  # Project documentation
 ```
 
 ---
 
 ## **Setup and Installation**
 
-### Prerequisites
-
-Install the required packages using pip:
+Install all required dependencies using:
 
 ```bash
-pip install opencv-python mediapipe numpy scikit-learn joblib
+pip install opencv-python mediapipe numpy tensorflow keras pillow
 ```
 
 ---
 
 ## **Workflow**
 
-### 1. Data Collection
+### 1. **Collect Gesture Samples**
 
-Use the `collect_data.py` script to capture images for each gesture. The script uses a webcam to save frames associated with specific gesture labels.
+Capture 30-frame video sequences for each gesture using your webcam:
 
 ```bash
-python collect_data.py
+python collect_imgs.py
 ```
 
-Each gesture class should have a separate folder with consistent frame counts for training.
+Samples are stored in the `videodata/` directory.
 
 ---
 
-### 2. Keypoint Extraction
+### 2. **Preprocess Data**
 
-Extract MediaPipe hand landmarks from the collected images and store them for training:
+Extract 21 hand landmarks per frame using MediaPipe and convert sequences into structured data:
 
 ```bash
-python extract_keypoints.py
+python create_dataset.py
 ```
 
-This script will generate a dataset of normalized keypoint features per gesture sample.
+Preprocessed data is stored in `preprocessed_data/`.
 
 ---
 
-### 3. Model Training
+### 3. **Create Label Mapping**
 
-Train a Random Forest classifier using the extracted landmark data:
+Create gesture-to-language mappings for multilingual translation:
 
 ```bash
-python train_model.py
+python create_mapping.py
 ```
 
-The model will be saved as `model.pkl` and the label encoder as `labels.pickle`.
+This script generates a pickle file containing mappings for English, Hindi, and Gujarati.
 
 ---
 
-### 4. Real-Time Inference
+### 4. **Train the LSTM Model**
 
-Launch the real-time gesture recognition interface:
+Train a sequential LSTM network to classify gesture sequences:
 
 ```bash
-python inference.py
+python buildlstm.py
 ```
 
-* The webcam feed is processed in real-time.
-* Detected hand gestures are classified and displayed as text.
-* Press `q` to quit.
+The trained model is saved as `lstm_model.h5`.
+
+---
+
+### 5. **Run Real-Time Inference**
+
+Launch real-time recognition with multilingual output:
+
+```bash
+python real_time_inference.py
+```
+
+Press `q` to exit the video window.
 
 ---
 
 ## **How It Works**
 
-1. **Hand Detection**: MediaPipe detects hand landmarks from video frames.
-2. **Feature Extraction**: Normalized x, y, z coordinates of 21 keypoints are extracted.
-3. **Classification**: A Random Forest model classifies the landmarks into gesture classes.
-4. **Display**: The predicted label is rendered on the video stream.
+1. Captures video frames via webcam
+2. Extracts MediaPipe hand landmarks from each frame
+3. Feeds the landmark sequence to the LSTM model
+4. Predicts gesture label and renders translations in English, Hindi, and Gujarati using font rendering
 
 ---
 
-## **Customization Options**
+## **Customization**
 
-* **Model Selection**: You can experiment with other classifiers (SVM, KNN, etc.) by modifying `train_model.py`.
-* **Landmark Features**: Add velocity or angle-based features for dynamic gestures.
-* **Display Settings**: Modify `inference.py` to change font, text color, or add GUI features.
+### Modify Font Settings
+
+In `real_time_inference.py`, you can adjust font and size:
+
+```python
+from PIL import ImageFont
+
+hindi_font = ImageFont.truetype("fonts/NotoSansDevanagari.ttf", 42)
+gujarati_font = ImageFont.truetype("fonts/NotoSansGujarati.ttf", 42)
+```
+
+### Adjust Confidence Threshold
+
+Control prediction sensitivity:
+
+```python
+CONFIDENCE_THRESHOLD = 0.85
+```
 
 ---
 
-## **Future Work**
+## **Planned Improvements**
 
-* Add support for dynamic gesture recognition using LSTM-based models.
-* Extend the system to output speech via text-to-speech (TTS) modules.
-* Incorporate multi-language text output (Hindi, Gujarati, etc.).
-* Build a web-based or mobile interface for broader accessibility.
+* Add support for dynamic gestures with higher temporal complexity
+* Integrate Text-to-Speech (TTS) for audio output
+* Expand gesture dataset for broader ISL vocabulary
+* Include support for additional Indian languages
 
 ---
 
-## **Authors**
+## **Contributors**
 
-* **Harshad Nagpure** – System Design, Model Development, Inference Pipeline
+* **Harshad Nagpure** – Model Development, System Integration
 * **Dewansh Gopani** – Data Collection and Preprocessing Support
 
-For inquiries: **[h.incworks@gmail.com](mailto:h.incworks@gmail.com)**
+📧 **Contact:** [h.incworks@gmail.com](mailto:h.incworks@gmail.com)
 
 ---
 
 ## **References**
 
 * [MediaPipe Hands](https://developers.google.com/mediapipe/solutions/vision/hand_landmarker)
-* [Scikit-learn Random Forest Documentation](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html)
-* [Indian Sign Language Dictionary – ISLRTC](https://islrtc.nic.in/)
+* [TensorFlow Sequential API (LSTM)](https://www.tensorflow.org/api_docs/python/tf/keras/Sequential)
+* [Indian Sign Language Dictionary (ISLRTC)](https://islrtc.nic.in/)
 
